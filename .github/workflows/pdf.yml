@@ -58,6 +58,33 @@ jobs:
           sudo swapon "$check_swap"
           free -h
           df -h / /mnt || true
+      - name: Diagnostics, typst compile
+        continue-on-error: true
+        env:
+          TYPST_FONT_PATHS: assets/fonts
+          TYPST_IGNORE_SYSTEM_FONTS: 'true'
+        run: |
+          nproc; free -m; swapon --show
+          monitor() { while sleep 30; do echo "== $(date -u +%T)"; free -m | awk 'NR>1{print $1,$2,$3,$4,$7}'; ps -eo rss=,pcpu=,etime=,comm= --sort=-rss | head -3; done; }
+          monitor & m=$!
+          timeout -k 20s 12m /usr/bin/time -v typst compile --root . --input stage=final content/main.typ "$RUNNER_TEMP/book.pdf"
+          status=$?
+          kill $m
+          exit $status
+      - name: Diagnostics, tinymist lint
+        continue-on-error: true
+        env:
+          TYPST_FONT_PATHS: assets/fonts
+          TYPST_IGNORE_SYSTEM_FONTS: 'true'
+        run: |
+          monitor() { while sleep 30; do echo "== $(date -u +%T)"; free -m | awk 'NR>1{print $1,$2,$3,$4,$7}'; ps -eo rss=,pcpu=,etime=,comm= --sort=-rss | head -3; done; }
+          monitor & m=$!
+          timeout -k 20s 12m /usr/bin/time -v tinymist lint --diagnostic-format short --root . --input stage=final content/main.typ
+          status=$?
+          kill $m
+          exit $status
+      - name: Diagnostics only
+        run: exit 1
       - name: Lint
         run: |
           set -euo pipefail

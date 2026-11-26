@@ -42,17 +42,31 @@ jobs:
               (target/name).chmod(0o755)
           with open(os.environ['GITHUB_PATH'], 'a') as stream:
               stream.write(str(target)+'\n')
-      - name: Check and build
-        # The full build needs more memory than the runner has: add swap.
+      - name: Swap
+        # A compile of the book takes more memory than the runner has: add
+        # swap on the larger temporary disk when there is one.
         run: |
           set -euo pipefail
-          check_swap="$RUNNER_TEMP/mishchenko-fomenko-2000.swap"
-          sudo fallocate -l 8G "$check_swap"
+          swap_dir="$RUNNER_TEMP"
+          if [[ -d /mnt ]] && (( $(df --output=avail -BG /mnt | tail -1 | tr -dc 0-9) > 30 )); then
+            swap_dir=/mnt
+          fi
+          check_swap="$swap_dir/mishchenko-fomenko-2000.swap"
+          sudo fallocate -l 24G "$check_swap"
           sudo chmod 600 "$check_swap"
           sudo mkswap "$check_swap"
           sudo swapon "$check_swap"
-          trap 'sudo swapoff "$check_swap"; sudo rm -f "$check_swap"' EXIT
           free -h
+          df -h / /mnt || true
+      - name: Lint
+        run: |
+          set -euo pipefail
+          (while sleep 60; do free -m | sed -n 2,3p | tr -s ' ' | paste -sd ' '; done) &
+          /usr/bin/time -v uv run --locked python scripts/project.py lint
+      - name: Check and build
+        run: |
+          set -euo pipefail
+          (while sleep 60; do free -m | sed -n 2,3p | tr -s ' ' | paste -sd ' '; done) &
           /usr/bin/time -v uv run --locked python scripts/project.py check
       - name: Checksums of the published PDFs
         working-directory: build

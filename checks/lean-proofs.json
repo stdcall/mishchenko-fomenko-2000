@@ -1,0 +1,143 @@
+[
+ {
+  "file": "checks/lean/MishchenkoFomenko/Ch01_JacobianOne.lean",
+  "declarations": [
+   "MishchenkoFomenko.Ch01.JacobianOne.HasDeriv.unique",
+   "MishchenkoFomenko.Ch01.JacobianOne.HasDeriv.mul",
+   "MishchenkoFomenko.Ch01.JacobianOne.HasDeriv.comp",
+   "MishchenkoFomenko.Ch01.JacobianOne.hasDeriv_exp",
+   "MishchenkoFomenko.Ch01.JacobianOne.hasDeriv_sin",
+   "MishchenkoFomenko.Ch01.JacobianOne.hasDeriv_cos",
+   "MishchenkoFomenko.Ch01.JacobianOne.dT₁_du",
+   "MishchenkoFomenko.Ch01.JacobianOne.dT₁_dv",
+   "MishchenkoFomenko.Ch01.JacobianOne.dT₂_du",
+   "MishchenkoFomenko.Ch01.JacobianOne.dT₂_dv",
+   "MishchenkoFomenko.Ch01.JacobianOne.jacobian_eq_one",
+   "MishchenkoFomenko.Ch01.JacobianOne.periodic",
+   "MishchenkoFomenko.Ch01.JacobianOne.not_injective",
+   "MishchenkoFomenko.Ch01.JacobianOne.norm_sq"
+  ],
+  "book": "Ch. 1, § 1, p. 16: the question whether a smooth map f of euclidean space onto itself with 0 < ε ≤ J(f) ≤ N < ∞ is one-to-one, and the editorial note answering it in the negative for n = 2 with T(u, v) = (e^u cos(v e^(-2u)), e^u sin(v e^(-2u))). With the derivative f(x + h) = f(x) + f' h + o(h) (unique; rules for sums, products, compositions, exp, sin, cos proved from this definition and the bounds of mathlib for |h| ≤ 1): ∂T1/∂u = e^u (cos θ + 2θ sin θ), ∂T1/∂v = -e^u e^(-2u) sin θ, ∂T2/∂u = e^u (sin θ - 2θ cos θ), ∂T2/∂v = e^u e^(-2u) cos θ, θ = v e^(-2u), so the Jacobian ∂T1/∂u ∂T2/∂v - ∂T1/∂v ∂T2/∂u equals 1 at every point; T(u, v) = T(u, v + 2π e^(2u)) and T(0, 0) = T(0, 2π), so T is not one-to-one; |T|^2 = e^(2u) > 0.",
+  "limitations": "The derivative is the little-o form of mathlib's HasDerivAt (hasDerivAt_iff_isLittleO_nhds_zero) over the asymptotics library; only the first partial derivatives of T are computed, not its smoothness. T maps the plane into, not onto, itself (its image misses the origin), as the note says; a map of R^2 onto itself with the same properties, Hadamard's theorem and the other statements of the note are not covered. The same identities are checked in checks/sage/chapter-1.py.",
+  "passages": [
+   "sec:curvilinear-coordinates",
+   "ss:cartesian-and-curvilinear"
+  ]
+ },
+ {
+  "file": "checks/lean/MishchenkoFomenko/Ch01_Hyperboloid.lean",
+  "declarations": [
+   "MishchenkoFomenko.Ch01.Hyperboloid.plane_meets_line",
+   "MishchenkoFomenko.Ch01.Hyperboloid.no_parallels"
+  ],
+  "book": "Ch. 1, § 4, p. 50: the remark proposing to prove that the geometry of the pseudosphere of real radius in R^3_1 (the one-sheeted hyperboloid -x^2 + y^2 + z^2 = α^2) is the Lobachevsky geometry, and its editorial note. «Lines» are the sections by planes through 0. Every plane a x + b y + c z = 0 other than x = 0 ((b, c) ≠ 0) contains a point (0, y, z) with y^2 + z^2 = α^2, on the hyperboloid and on the «line» x = 0; hence every plane through 0 and a point of the hyperboloid with x ≠ 0 meets that «line»: no «line» through a point off x = 0 misses x = 0, while the Lobachevsky plane has infinitely many such lines (p. 50). This refutes the printed remark.",
+  "limitations": "The Lobachevsky geometry itself is not formalized: its parallel axiom is the statement of the printed text on p. 50. The hypothesis that the point lies on the hyperboloid is not needed for the conclusion. The induced indefinite metric of the note is checked in checks/sage/chapter-1.py, not here.",
+  "passages": [
+   "sec:pseudosphere"
+  ]
+ },
+ {
+  "file": "checks/lean/MishchenkoFomenko/Ch02_ClosedGraph.lean",
+  "declarations": [
+   "MishchenkoFomenko.Ch02.ClosedGraph.graph_inv_eq",
+   "MishchenkoFomenko.Ch02.ClosedGraph.graph_inv_closed",
+   "MishchenkoFomenko.Ch02.ClosedGraph.inv_not_continuousAt_zero",
+   "MishchenkoFomenko.Ch02.ClosedGraph.printed_converse_false",
+   "MishchenkoFomenko.Ch02.ClosedGraph.graph_closed_of_continuous",
+   "MishchenkoFomenko.Ch02.ClosedGraph.continuous_iff_graph_closed_of_compact"
+  ],
+  "book": "Ch. 2, § 2, p. 83, problem 7 and its editorial note. The printed problem asked to prove that a map into a Hausdorff space is continuous if and only if its graph is closed. The graph of f(x) = 1/x, f(0) = 0 (Lean's x⁻¹ on R) is the hyperbola x y = 1 with the origin, closed in R^2, and f is not continuous at 0, so the printed converse fails; the graph of a continuous map into a Hausdorff space is closed (the corrected problem); for a compact Hausdorff space Y continuity is equivalent to a closed graph (the converse quoted in the note).",
+  "limitations": "The last two statements are mathlib's Continuous.isClosed_graph and continuous_iff_isClosed_graph, restated in the book's terms.",
+  "passages": [
+   "pr:closed-graph"
+  ]
+ },
+ {
+  "file": "checks/lean/MishchenkoFomenko/Ch04_Compactification.lean",
+  "declarations": [
+   "MishchenkoFomenko.Ch04.Compactification.eval_F",
+   "MishchenkoFomenko.Ch04.Compactification.eval_q",
+   "MishchenkoFomenko.Ch04.Compactification.F_zero",
+   "MishchenkoFomenko.Ch04.Compactification.du_F",
+   "MishchenkoFomenko.Ch04.Compactification.dv_F",
+   "MishchenkoFomenko.Ch04.Compactification.singular",
+   "MishchenkoFomenko.Ch04.Compactification.smooth_one",
+   "MishchenkoFomenko.Ch04.Compactification.q_three",
+   "MishchenkoFomenko.Ch04.Compactification.q_singular"
+  ],
+  "book": "Ch. 4, § 6, pp. 286-288: Theorem 2 (the Riemann surface of w = sqrt(P_n(z)) compactifies in S^2 × S^2 to a smooth manifold), its editorial note (true only for n = 1), and the curve in CP^2 on p. 288. In u = 1/z, v = 1/w the closure is F(u, v) = v^2 ∏(1 - a_k u) - u^n = 0 over any commutative ring; partial derivatives of a polynomial expression are derivatives at t = 0 of the one-variable polynomials t ↦ G(u0 + t, v0), G(u0, v0 + t). F(0, 0) = 0 for n ≥ 1; for n ≥ 2 both partial derivatives vanish at (0, 0), so the point (∞_z, ∞_w) is singular and the printed theorem fails; for n = 1, ∂F/∂u(0, 0) = -1. On p. 288, q(u, v) = v^(n-2) - ∏(u - a_k v): for n = 3 its gradient at (0, 0) is (0, 1), refuting the printed «for n > 2 the gradient of q at (0, 0) is zero»; for n ≥ 4 it is zero.",
+  "limitations": "The derivative is the algebraic one of polynomials (Polynomial.derivative), over any commutative ring; the analytic derivative over C is not used. The type of the singular point (two branches for even n, a cusp for odd n ≥ 3), the implicit function theorem and the topology of the compactification are not covered (the singularities are examined in checks/sage/chapter-4.py).",
+  "passages": [
+   "th:compactification",
+   "sec:riemann-surfaces"
+  ]
+ },
+ {
+  "file": "checks/lean/MishchenkoFomenko/Ch05_Pfaffian.lean",
+  "declarations": [
+   "MishchenkoFomenko.Ch05.Pfaffian.det_skew",
+   "MishchenkoFomenko.Ch05.Pfaffian.skew_eq",
+   "MishchenkoFomenko.Ch05.Pfaffian.det_eq_pf_sq",
+   "MishchenkoFomenko.Ch05.Pfaffian.book_example",
+   "MishchenkoFomenko.Ch05.Pfaffian.pf_eq_pm_sqrt_det",
+   "MishchenkoFomenko.Ch05.Pfaffian.minus_sign_needed"
+  ],
+  "book": "Ch. 5, § 2, pp. 326-327: Theorem 1 (a skew scalar product is nondegenerate iff Ω = ω ∧ ... ∧ ω/n! is nonzero) and the example n = 2, where Ω = f dx^1 ∧ ... ∧ dx^4 and f = ±sqrt(det(ω_ij)). For every skew 4 × 4 matrix (ω_ji = -ω_ij, zero diagonal) over a commutative ring, det(ω_ij) = f^2 with f = ω12 ω34 - ω13 ω24 + ω14 ω23 (the Pfaffian; ω12 ω34 for the book's ω = ω12 dx^1 ∧ dx^2 + ω34 dx^3 ∧ dx^4); over R, f = sqrt(det) or f = -sqrt(det); for ω = -dx^1 ∧ dx^2 + dx^3 ∧ dx^4, f = -1 = -sqrt(det), so both signs occur.",
+  "limitations": "The exterior algebra is not formalized: that ω ∧ ω/2! = f dx^1 ∧ ... ∧ dx^4 with this f is the computation of the printed text, not proved here; Theorem 1, the canonical form of a skew matrix and dimensions other than 4 are not covered.",
+  "passages": [
+   "th:nondegenerate-form",
+   "ss:skew-tensors"
+  ]
+ },
+ {
+  "file": "checks/lean/MishchenkoFomenko/Ch05_SectionalCurvature.lean",
+  "declarations": [
+   "MishchenkoFomenko.Ch05.SectionalCurvature.printed_eq_neg_corrected",
+   "MishchenkoFomenko.Ch05.SectionalCurvature.corrected_dim_two",
+   "MishchenkoFomenko.Ch05.SectionalCurvature.corrected_four_terms",
+   "MishchenkoFomenko.Ch05.SectionalCurvature.printed_dim_two",
+   "MishchenkoFomenko.Ch05.SectionalCurvature.R₂_values",
+   "MishchenkoFomenko.Ch05.SectionalCurvature.corrected_R₂",
+   "MishchenkoFomenko.Ch05.SectionalCurvature.printed_R₂",
+   "MishchenkoFomenko.Ch05.SectionalCurvature.area_one"
+  ],
+  "book": "Ch. 5, § 5, pp. 370-371: the curvature R(σ) in a two-dimensional direction with its editorial note, Lemma 3 and Lemma 4. Over any commutative ring, for R_{βj,kl} skew-symmetric in the first pair, the printed ⟨R(X, Y)X; Y⟩ = Σ R_{βj,kl} Y^β X^j X^k Y^l equals minus the corrected ⟨R(X, Y)Y; X⟩ = Σ R_{βj,kl} X^β Y^j X^k Y^l of Lemma 3, in every dimension. For n = 2 and R skew-symmetric in each pair, the corrected sum is R_{12,12} (X^1 Y^2 - X^2 Y^1)^2 and equals the printed four-term line of Lemma 4; with (X^1 Y^2 - X^2 Y^1)^2 = 1 the corrected R(σ) is R_{12,12} = K and the printed one is -K; the explicit tensor R_{12,12} = R_{21,21} = K, R_{12,21} = R_{21,12} = -K.",
+  "limitations": "Only the algebra of the contractions: the coordinate formula of R(X, Y)Z, the sign convention of the section and R_{12,12} = K(P) in coordinates orthonormal at P are taken from the printed text. Examples (sphere, Lobachevsky plane) are checked in checks/sage/chapter-5.py.",
+  "passages": [
+   "ss:curvature-applications",
+   "lem:sectional-curvature-formula",
+   "lem:sectional-gauss-curvature"
+  ]
+ },
+ {
+  "file": "checks/lean/MishchenkoFomenko/Ch06_PowerMapJacobian.lean",
+  "declarations": [
+   "MishchenkoFomenko.Ch06.PowerMapJacobian.leftMulMatrix_eq",
+   "MishchenkoFomenko.Ch06.PowerMapJacobian.toMatrix_mulLeft",
+   "MishchenkoFomenko.Ch06.PowerMapJacobian.det_mulLeft",
+   "MishchenkoFomenko.Ch06.PowerMapJacobian.HasRealDeriv.unique",
+   "MishchenkoFomenko.Ch06.PowerMapJacobian.hasRealDeriv_pow",
+   "MishchenkoFomenko.Ch06.PowerMapJacobian.jacobian_pow"
+  ],
+  "book": "Ch. 6, § 3, p. 403: the proof of the fundamental theorem of algebra, the map w = z^n and det ∂(u, v)/∂(x, y) = n^2 |z^(n-1)|^2 > 0 for z ≠ 0. The matrix of the R-linear map h ↦ c h of C in the basis 1, i is (Re c, -Im c; Im c, Re c), and its determinant (LinearMap.det) equals Algebra.norm R c = |c|^2. With the differential f(z + h) = f(z) + L h + o(h) (unique), the differential of z ↦ z^n at z is h ↦ n z^(n-1) h, so its determinant is n^2 |z|^(2(n-1)) > 0 for n ≥ 1 and z ≠ 0.",
+  "limitations": "The differential is the little-o form of mathlib's Fréchet derivative over the asymptotics library. The degree of the map, the n roots of z^n = 1, the extension to CP^1 and the homotopy (pp. 403-404) are not covered.",
+  "passages": [
+   "ss:fundamental-theorem-of-algebra",
+   "eq:power-map"
+  ]
+ },
+ {
+  "file": "checks/lean/MishchenkoFomenko/Ch07_RigidBody.lean",
+  "declarations": [
+   "MishchenkoFomenko.Ch07.RigidBody.along_Q",
+   "MishchenkoFomenko.Ch07.RigidBody.along_P",
+   "MishchenkoFomenko.Ch07.RigidBody.along_P₀",
+   "MishchenkoFomenko.Ch07.RigidBody.printed_P_not_conserved"
+  ],
+  "book": "Ch. 7, § 4, pp. 444-445: the rigid body for n = 3, ẋ = (λ1 - λ2)/(λ1 + λ2) yz, ẏ = (λ3 - λ1)/(λ3 + λ1) xz, ż = (λ2 - λ3)/(λ2 + λ3) yx, λi + λj ≠ 0, and the editorial note on P. The derivative of G along the field at p is the derivative at t = 0 of the polynomial t ↦ G(p + t Ẋ(p)). For all real λi, x, y, z: Ẋ(Q) = 2xyz(λ1 - λ2 + λ3 - λ1 + λ2 - λ3) = 0 for Q = (λ1 + λ2)x^2 + (λ1 + λ3)y^2 + (λ2 + λ3)z^2, and Ẋ(P) = 2xyz(λ1^2 - λ2^2 + λ3^2 - λ1^2 + λ2^2 - λ3^2) = 0 for the corrected P = (λ1 + λ2)^2 x^2 + (λ1 + λ3)^2 y^2 + (λ2 + λ3)^2 z^2 (the lines of p. 445); for the printed P = x^2 + y^2 + z^2, Ẋ(P) = 2xyz(λ1 - λ2)(λ1 - λ3)(λ2 - λ3)/((λ1 + λ2)(λ1 + λ3)(λ2 + λ3)), equal to -1/15 ≠ 0 at λ = (1, 2, 3), x = y = z = 1, so it is not an integral.",
+  "limitations": "The derivative along the field is the algebraic derivative of a polynomial in t; trajectories of the system are not formalized. The derivation of the system from φẊ = [X, φX], the functional independence of P and Q and the Hamiltonian structure on the level surfaces are checked in checks/sage/chapter-7.py, not here.",
+  "passages": [
+   "sec:symplectic-geometry"
+  ]
+ }
+]

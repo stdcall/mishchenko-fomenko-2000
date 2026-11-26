@@ -1,0 +1,9 @@
+-- Lean checks of the book; one file per statement in MishchenkoFomenko/.
+import MishchenkoFomenko.Ch01_JacobianOne
+import MishchenkoFomenko.Ch01_Hyperboloid
+import MishchenkoFomenko.Ch02_ClosedGraph
+import MishchenkoFomenko.Ch04_Compactification
+import MishchenkoFomenko.Ch05_Pfaffian
+import MishchenkoFomenko.Ch05_SectionalCurvature
+import MishchenkoFomenko.Ch06_PowerMapJacobian
+import MishchenkoFomenko.Ch07_RigidBody

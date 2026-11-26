@@ -1,0 +1,15 @@
+{
+  "max_line_length": 80,
+  "chapter_files": "content/[0-9]{2}(?:-[0-9]{2})?-[a-z0-9-]+\\.typ",
+  "cited_helpers": [],
+  "literal_references": {},
+  "local_markup": {
+    "content/01-01-coordinates.typ": {
+      "#text(size: 0.8em)": "The Jacobi matrix of the n-dimensional spherical coordinates (p. 19) is wider than the type area; the book sets it in reduced type."
+    },
+    "content/05-02-tensor-examples.typ": {
+      "#box(stroke": "The canonical form of a skew-symmetric matrix (p. 326) has ruled 2x2 blocks inside the matrix, as printed."
+    }
+  },
+  "literal_formula_numbers": false
+}

@@ -42,58 +42,17 @@ jobs:
               (target/name).chmod(0o755)
           with open(os.environ['GITHUB_PATH'], 'a') as stream:
               stream.write(str(target)+'\n')
-      - name: Swap
-        # A compile of the book takes more memory than the runner has: add
-        # swap on the larger temporary disk when there is one.
+      - name: Check and build
+        # The full build needs more memory than the runner has: add swap.
         run: |
           set -euo pipefail
-          swap_dir="$RUNNER_TEMP"
-          if [[ -d /mnt ]] && (( $(df --output=avail -BG /mnt | tail -1 | tr -dc 0-9) > 30 )); then
-            swap_dir=/mnt
-          fi
-          check_swap="$swap_dir/mishchenko-fomenko-2000.swap"
-          sudo fallocate -l 24G "$check_swap"
+          check_swap="$RUNNER_TEMP/mishchenko-fomenko-2000.swap"
+          sudo fallocate -l 8G "$check_swap"
           sudo chmod 600 "$check_swap"
           sudo mkswap "$check_swap"
           sudo swapon "$check_swap"
+          trap 'sudo swapoff "$check_swap"; sudo rm -f "$check_swap"' EXIT
           free -h
-          df -h / /mnt || true
-      - name: Diagnostics, typst compile
-        continue-on-error: true
-        env:
-          TYPST_FONT_PATHS: assets/fonts
-          TYPST_IGNORE_SYSTEM_FONTS: 'true'
-        run: |
-          nproc; free -m; swapon --show
-          monitor() { while sleep 30; do echo "== $(date -u +%T)"; free -m | awk 'NR>1{print $1,$2,$3,$4,$7}'; ps -eo rss=,pcpu=,etime=,comm= --sort=-rss | head -3; done; }
-          monitor & m=$!
-          timeout -k 20s 12m /usr/bin/time -v typst compile --root . --input stage=final content/main.typ "$RUNNER_TEMP/book.pdf"
-          status=$?
-          kill $m
-          exit $status
-      - name: Diagnostics, tinymist lint
-        continue-on-error: true
-        env:
-          TYPST_FONT_PATHS: assets/fonts
-          TYPST_IGNORE_SYSTEM_FONTS: 'true'
-        run: |
-          monitor() { while sleep 30; do echo "== $(date -u +%T)"; free -m | awk 'NR>1{print $1,$2,$3,$4,$7}'; ps -eo rss=,pcpu=,etime=,comm= --sort=-rss | head -3; done; }
-          monitor & m=$!
-          timeout -k 20s 12m /usr/bin/time -v tinymist lint --diagnostic-format short --root . --input stage=final content/main.typ
-          status=$?
-          kill $m
-          exit $status
-      - name: Diagnostics only
-        run: exit 1
-      - name: Lint
-        run: |
-          set -euo pipefail
-          (while sleep 60; do free -m | sed -n 2,3p | tr -s ' ' | paste -sd ' '; done) &
-          /usr/bin/time -v uv run --locked python scripts/project.py lint
-      - name: Check and build
-        run: |
-          set -euo pipefail
-          (while sleep 60; do free -m | sed -n 2,3p | tr -s ' ' | paste -sd ' '; done) &
           /usr/bin/time -v uv run --locked python scripts/project.py check
       - name: Checksums of the published PDFs
         working-directory: build
